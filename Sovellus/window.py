@@ -45,6 +45,8 @@ class Window(QMainWindow):
 
         self.first_slider = QSlider(Qt.Horizontal)
         self.first_slider.setRange(0, 36000)  # 360 000 in order to have 0.01 increments from 0 to 360 degrees
+        self.first_slider.setTickPosition(QSlider.TicksAbove)
+        self.first_slider.setTickInterval(3600)
         grid.addWidget(self.first_slider, 1, 0, 1, 2)
         self.first_slider.valueChanged.connect(self.first_slider_value_changed)
 
@@ -56,6 +58,8 @@ class Window(QMainWindow):
 
         self.second_slider = QSlider(Qt.Horizontal)
         self.second_slider.setRange(0, 36000)  # 360 000 in order to have 0.01 increments from 0 to 360 degrees
+        self.second_slider.setTickPosition(QSlider.TicksAbove)
+        self.second_slider.setTickInterval(3600)
         grid.addWidget(self.second_slider, 3, 0, 1, 2)
         self.second_slider.valueChanged.connect(self.second_slider_value_changed)
 
@@ -92,7 +96,7 @@ class Window(QMainWindow):
         grid = QGridLayout()
 
         # adding the instructions label
-        label_instruction = QLabel("Give the destination\ncoordinates in pixels.")
+        label_instruction = QLabel("Give the destination\ncoordinates from origin.")
         label_instruction.setAlignment(Qt.AlignCenter | Qt.AlignHCenter)
         grid.addWidget(label_instruction, 0, 0, 1, 2)
 
@@ -128,8 +132,8 @@ class Window(QMainWindow):
     def move_button_pressed(self):
         # checking if the lines have numbers in them
         if self.x_line.text() and self.y_line.text():
-            if 0 <= int(self.x_line.text()) <= 5 and 0 <= int(self.y_line.text()) <= 5:
-                self.label_reach.hide()
+            if -5 <= int(self.x_line.text()) <= 5 and -5 <= int(self.y_line.text()) <= 5:  # 5 should be replaced with
+                self.label_reach.hide()                                                    # the sum of joint lengths
             else:
                 self.label_reach.show()
 
@@ -141,9 +145,18 @@ class Window(QMainWindow):
         suctionDock.setFeatures(QDockWidget.NoDockWidgetFeatures)
         self.addDockWidget(Qt.LeftDockWidgetArea, suctionDock)
 
-        # adding Widget with button
+        suctionWidget = QWidget(self)
+        suctionDock.setWidget(suctionWidget)
+
+        # building layout
+        grid = QGridLayout()
+
+        # adding button into layout
         self.suction_button = QPushButton("Suck")
-        suctionDock.setWidget(self.suction_button)
+        grid.addWidget(self.suction_button)
+
+        # adding layout into widget
+        suctionWidget.setLayout(grid)
 
     # setting up the graphics for the robot and item
     def set_graphics(self):
