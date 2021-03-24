@@ -11,13 +11,11 @@ class Robot:
         self.theta1 = 90  # in degrees
         self.theta2 = 90  # in degrees
         self.coord1 = 0, self.len1  # when in 90 degrees
-        self.coord2 = self.len2, self.len1  # when in 90 degrees
+        self.coord2 = self.len1, self.len2  # when in 90 degrees
         self.suction = False
 
     def move_with_angles(self, robot_graphics, square, square_graphics, theta1, theta2):
-        # Window: window class
         # here the forward kinematics should be used and based on that the graphics will be updated
-        # the other angle stays static in manual, where it is then just called as robot.theta 1 or 2.
 
         # updating the angles
         self.theta1 = theta1
@@ -30,7 +28,7 @@ class Robot:
         robot_graphics.update_pose()
         square_graphics.update_position()
 
-        pass
+
 
     def move_with_coordinates(self, window, x, y):
         # todo: Linear movement towards the destined coordinate; update graphics in each loop
@@ -59,7 +57,7 @@ class Robot:
         if self.suction:
             square.set_location(self.coord2)
 
-        pass
+
 
     def inverse_kinematics(self, coordinates):
         # todo: return joint angles in degrees based on the current coordinates

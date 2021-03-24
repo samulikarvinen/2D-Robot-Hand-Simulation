@@ -18,13 +18,14 @@ class Window(QMainWindow):
         self.setFixedSize(QSize(1080, 720))
 
         # setting up the objects
-        link1 = 20
-        link2 = 20
-        square_width = 5
-        square_height = 5
+        link1 = 150
+        link2 = 150
+        radius = link1 + link2
+        square_width = 50
+        square_height = 50
 
         self.robot = Robot(link1, link2)  # lengths of the links
-        self.square = Square(square_width, square_height, link1 + link2)  # add size
+        self.square = Square(square_width, square_height, radius)  # add size
 
         # setting up the docks
         self.set_manualdock()
@@ -83,7 +84,7 @@ class Window(QMainWindow):
         theta1 = self.first_slider.value()*0.01  # from increments to degrees
         self.label_first_theta.setText("{:.2f}\u00B0".format(theta1))
         # TODO: add info to robot which updates the graphics
-        # self.robot.move_with_angles(self.robot_graphics, self.square, self.square_graphics, theta1, self.robot.theta2)
+        self.robot.move_with_angles(self.robot_graphics, self.square, self.square_graphics, theta1, self.robot.theta2)
 
     def second_slider_value_changed(self):
         theta2 = self.second_slider.value()*0.01  # from increments to degrees
@@ -176,7 +177,8 @@ class Window(QMainWindow):
         suctionWidget.setLayout(grid)
 
     def suction_button_pressed(self):
-        # todo: changes colors depending on if the suction is successful
+        # todo: changes colors depending on if the suction is successful and changes the robot class suction
+        #       to True if it works
         pass
 
     '''-------------------------------------------------------------------------'''

@@ -4,6 +4,7 @@ from PyQt5.QtWidgets import *
 class SquareGraphicsItem(QGraphicsItem):
     def __init__(self, square):
         super(SquareGraphicsItem, self).__init__()
+        self.square = square
         # todo: add information from the square class so that the square can be drawn to the scene
         pass
 
