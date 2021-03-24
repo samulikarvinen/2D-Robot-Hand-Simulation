@@ -1,4 +1,6 @@
 import sys
+from math import *
+from robot import Robot
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
@@ -10,9 +12,10 @@ class Window(QMainWindow):
         super().__init__()
         # setting up the window
         self.setWindowTitle("Robot hand")
-        self.setGeometry(100, 100, 500, 400)
+        self.setFixedSize(QSize(1080, 720))
 
         # setting up the objects
+        self.robot = Robot(20, 20)  # lengths of the links
 
         # setting up the docks
         self.set_manualdock()
@@ -22,6 +25,7 @@ class Window(QMainWindow):
         # setting up the graphics
         self.set_graphics()
 
+    '''---------------------------------------------------------------------'''
     '''Setting up the manual dock with its buttons and their functionalities'''
     def set_manualdock(self):
         manualDock = QDockWidget()
@@ -67,19 +71,18 @@ class Window(QMainWindow):
         manualWidget.setLayout(grid)
 
     def first_slider_value_changed(self):
-        theta_one = self.first_slider.value()*0.01  # from increments to degrees
-        self.label_first_theta.setText("{:.2f}\u00B0".format(theta_one))
-        # todo: save the theta 1 to robot class and update the coordinates of the joints
-        #       of the robot using the robot.forward_kinematics function. After this,
-        #       update the graphical object of the robot using the information from the robot class.
+        theta1 = self.first_slider.value()*0.01  # from increments to degrees
+        self.label_first_theta.setText("{:.2f}\u00B0".format(theta1))
+        # TODO: add info to robot which updates the graphics
+        # self.robot.move_with_angles(self, theta1, self.robot.theta2)
 
     def second_slider_value_changed(self):
-        theta_two = self.second_slider.value()*0.01  # from increments to degrees
-        self.label_second_theta.setText("{:.2f}\u00B0".format(theta_two))
-        # todo: save the theta 2 to robot class and update the coordinates of the joints
-        #       of the robot using the robot.forward_kinematics function. After this,
-        #       update the graphical object of the robot using the information from the robot class.
+        theta2 = self.second_slider.value()*0.01  # from increments to degrees
+        self.label_second_theta.setText("{:.2f}\u00B0".format(theta2))
+        # TODO: add info to robot which updates the graphics
+        # self.robot.move_with_angles(self, self.robot.theta1, theta2)
 
+    '''--------------------------------------------------------------'''
     '''Setting up the auto dock its buttons and their functionalities'''
     def set_autodock(self):
         autoDock = QDockWidget()
@@ -132,12 +135,16 @@ class Window(QMainWindow):
     def move_button_pressed(self):
         # checking if the lines have numbers in them
         if self.x_line.text() and self.y_line.text():
-            if -5 <= int(self.x_line.text()) <= 5 and -5 <= int(self.y_line.text()) <= 5:  # 5 should be replaced with
-                self.label_reach.hide()                                                    # the sum of joint lengths
+            x = int(self.x_line.text())
+            y = int(self.y_line.text())
+            if sqrt(x**2 + y**2) <= (self.robot.len1 + self.robot.len2):
+                self.label_reach.hide()
+            # TODO: add info to robot which updates the graphics
             else:
                 self.label_reach.show()
 
-    # setting up the suction dock
+    '''-----------------------------------------------------------------'''
+    '''Setting up the suction dock its buttons and their functionalities'''
     def set_suctiondock(self):
         suctionDock = QDockWidget()
         suctionDock.setWindowTitle("Suction")
@@ -154,13 +161,37 @@ class Window(QMainWindow):
         # adding button into layout
         self.suction_button = QPushButton("Suck")
         grid.addWidget(self.suction_button)
+        self.suction_button.pressed.connect(self.suction_button_pressed)
 
         # adding layout into widget
         suctionWidget.setLayout(grid)
 
-    # setting up the graphics for the robot and item
+    def suction_button_pressed(self):
+        # todo: changes colors depending on if the suction is successful
+        pass
+
+    '''---------------------------------------------------------------------------'''
+    '''Setting up the graphics for robot and item which also updates them in scene'''
+    def update_robot(self):
+        pass
+
+    def update_item(self):
+        pass
+
+    '''-------------------------------------------------------------------------'''
+    '''setting up the central widget as graphics view, scene and add graphic items'''
     def set_graphics(self):
-        self.setCentralWidget(QTextEdit())
+        # setting up the central widget as graphics view
+        self.graphicsview = QGraphicsView()
+        self.setCentralWidget(self.view)
+
+        # setting up the scene
+        self.scene = QGraphicsScene()
+        self.scene.addItem(self.update_robot())
+        self.scene.addItem(self.update_item())
+
+        # setting the scene to the view
+        self.graphicsview.setScene(self.scene)
 
 
 if __name__ == '__main__':
