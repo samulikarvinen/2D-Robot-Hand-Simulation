@@ -1,6 +1,9 @@
 import sys
 from math import *
 from robot import Robot
+from robot_graphics_item import RobotGraphicsItem
+from square import Square
+from square_graphics_item import SquareGraphicsItem
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
@@ -11,11 +14,17 @@ class Window(QMainWindow):
     def __init__(self):
         super().__init__()
         # setting up the window
-        self.setWindowTitle("Robot hand")
+        self.setWindowTitle("Robot hand 9000")
         self.setFixedSize(QSize(1080, 720))
 
         # setting up the objects
-        self.robot = Robot(20, 20)  # lengths of the links
+        link1 = 20
+        link2 = 20
+        square_width = 5
+        square_height = 5
+
+        self.robot = Robot(link1, link2)  # lengths of the links
+        self.square = Square(square_width, square_height, link1 + link2)  # add size
 
         # setting up the docks
         self.set_manualdock()
@@ -74,13 +83,13 @@ class Window(QMainWindow):
         theta1 = self.first_slider.value()*0.01  # from increments to degrees
         self.label_first_theta.setText("{:.2f}\u00B0".format(theta1))
         # TODO: add info to robot which updates the graphics
-        # self.robot.move_with_angles(self, theta1, self.robot.theta2)
+        # self.robot.move_with_angles(self.robot_graphics, self.square, self.square_graphics, theta1, self.robot.theta2)
 
     def second_slider_value_changed(self):
         theta2 = self.second_slider.value()*0.01  # from increments to degrees
         self.label_second_theta.setText("{:.2f}\u00B0".format(theta2))
         # TODO: add info to robot which updates the graphics
-        # self.robot.move_with_angles(self, self.robot.theta1, theta2)
+        # self.robot.move_with_angles(self.robot_graphics, self.square, self.square_graphics, self.robot.theta1, theta2)
 
     '''--------------------------------------------------------------'''
     '''Setting up the auto dock its buttons and their functionalities'''
@@ -170,25 +179,21 @@ class Window(QMainWindow):
         # todo: changes colors depending on if the suction is successful
         pass
 
-    '''---------------------------------------------------------------------------'''
-    '''Setting up the graphics for robot and item which also updates them in scene'''
-    def update_robot(self):
-        pass
-
-    def update_item(self):
-        pass
-
     '''-------------------------------------------------------------------------'''
     '''setting up the central widget as graphics view, scene and add graphic items'''
     def set_graphics(self):
         # setting up the central widget as graphics view
         self.graphicsview = QGraphicsView()
-        self.setCentralWidget(self.view)
+        self.setCentralWidget(self.graphicsview)
 
-        # setting up the scene
+        # setting up the graphical items
+        self.robot_graphics = RobotGraphicsItem(self.robot)
+        self.square_graphics = SquareGraphicsItem(self.square)
+
+        # setting up the scene and add items
         self.scene = QGraphicsScene()
-        self.scene.addItem(self.update_robot())
-        self.scene.addItem(self.update_item())
+        self.scene.addItem(self.robot_graphics)
+        self.scene.addItem(self.square_graphics)
 
         # setting the scene to the view
         self.graphicsview.setScene(self.scene)
