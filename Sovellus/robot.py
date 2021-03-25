@@ -28,8 +28,6 @@ class Robot:
         robot_graphics.update_pose()
         square_graphics.update_position()
 
-
-
     def move_with_coordinates(self, window, x, y):
         # todo: Linear movement towards the destined coordinate; update graphics in each loop
         pass

@@ -9,7 +9,7 @@ class SquareGraphicsItem(QGraphicsRectItem):
         self.square = square
         self.setRect(0, 0, self.square.width, self.square.height)
         self.setPos(self.square.location[0]-self.square.width/2, self.square.location[1]-self.square.height/2)
-        self.setBrush(QBrush(QColor(0, 255, 0)))
+        self.setBrush(QBrush(QGradient(QGradient.JuicyCake)))
 
     def update_position(self):
         self.setPos(self.square.location[0]-self.square.width/2, self.square.location[1]-self.square.height/2)
