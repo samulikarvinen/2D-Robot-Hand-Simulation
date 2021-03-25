@@ -7,11 +7,9 @@ class SquareGraphicsItem(QGraphicsRectItem):
     def __init__(self, square):
         super(SquareGraphicsItem, self).__init__()
         self.square = square
-        self.setRect(self.square.location[0], self.square.location[1], self.square.width, self.square.height)
+        self.setRect(0, 0, self.square.width, self.square.height)
+        self.setPos(self.square.location[0]-self.square.width/2, self.square.location[1]-self.square.height/2)
         self.setBrush(QBrush(QColor(0, 255, 0)))
-        # todo: add information from the square class so that the square can be drawn to the scene
-
 
     def update_position(self):
-        # todo: update position, which is changed if the suction is on.
-        pass
+        self.setPos(self.square.location[0]-self.square.width/2, self.square.location[1]-self.square.height/2)

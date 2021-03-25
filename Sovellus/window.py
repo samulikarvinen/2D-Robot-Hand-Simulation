@@ -168,6 +168,7 @@ class Window(QMainWindow):
 
         # adding button into layout
         self.suction_button = QPushButton("Suck")
+        self.suction_button.setCheckable(True)
         grid.addWidget(self.suction_button)
         self.suction_button.pressed.connect(self.suction_button_pressed)
 
@@ -177,7 +178,18 @@ class Window(QMainWindow):
     def suction_button_pressed(self):
         # todo: changes colors depending on if the suction is successful and changes the robot class suction
         #       to True if it works
-        pass
+
+        if self.suction_button.isChecked():
+            self.robot.suction = False
+            self.suction_button.setStyleSheet("background-color: rgb(225,225,225)")
+        else:
+            if self.robot_graphics.endeff.collidesWithItem(self.square_graphics):
+                self.robot.suction = True
+
+
+                self.suction_button.setStyleSheet("background-color: green")
+            else:
+                self.suction_button.setStyleSheet("background-color: rgb(171,46,70)")
 
     '''-------------------------------------------------------------------------'''
     '''setting up the central widget as graphics view, scene and add graphic items'''
