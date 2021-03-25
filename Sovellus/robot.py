@@ -8,10 +8,10 @@ class Robot:
     def __init__(self, len1, len2):
         self.len1 = len1
         self.len2 = len2
-        self.theta1 = 90  # in degrees
-        self.theta2 = 90  # in degrees
-        self.coord1 = 0, self.len1  # when in 90 degrees
-        self.coord2 = self.len1, self.len2  # when in 90 degrees
+        self.theta1 = 0  # in degrees
+        self.theta2 = 0  # in degrees
+        self.coord1 = self.len1, 0  # when in 90 degrees
+        self.coord2 = self.len1 + self.len2, 0   # when in 90 degrees
         self.suction = False
 
     def move_with_angles(self, robot_graphics, square, square_graphics, theta1, theta2):

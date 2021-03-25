@@ -83,14 +83,12 @@ class Window(QMainWindow):
     def first_slider_value_changed(self):
         theta1 = self.first_slider.value()*0.01  # from increments to degrees
         self.label_first_theta.setText("{:.2f}\u00B0".format(theta1))
-        # TODO: add info to robot which updates the graphics
         self.robot.move_with_angles(self.robot_graphics, self.square, self.square_graphics, theta1, self.robot.theta2)
 
     def second_slider_value_changed(self):
         theta2 = self.second_slider.value()*0.01  # from increments to degrees
         self.label_second_theta.setText("{:.2f}\u00B0".format(theta2))
-        # TODO: add info to robot which updates the graphics
-        # self.robot.move_with_angles(self.robot_graphics, self.square, self.square_graphics, self.robot.theta1, theta2)
+        self.robot.move_with_angles(self.robot_graphics, self.square, self.square_graphics, self.robot.theta1, theta2)
 
     '''--------------------------------------------------------------'''
     '''Setting up the auto dock its buttons and their functionalities'''
@@ -189,13 +187,13 @@ class Window(QMainWindow):
         self.setCentralWidget(self.graphicsview)
 
         # setting up the graphical items
-        self.robot_graphics = RobotGraphicsItem(self.robot)
         self.square_graphics = SquareGraphicsItem(self.square)
+        self.robot_graphics = RobotGraphicsItem(self.robot)
 
         # setting up the scene and add items
         self.scene = QGraphicsScene()
-        self.scene.addItem(self.robot_graphics)
         self.scene.addItem(self.square_graphics)
+        self.scene.addItem(self.robot_graphics)
 
         # setting the scene to the view
         self.graphicsview.setScene(self.scene)
