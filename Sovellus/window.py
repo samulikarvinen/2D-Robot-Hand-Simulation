@@ -160,6 +160,7 @@ class Window(QMainWindow):
         suctionDock.setFeatures(QDockWidget.NoDockWidgetFeatures)
         self.addDockWidget(Qt.LeftDockWidgetArea, suctionDock)
 
+        # setting widget to the dock
         suctionWidget = QWidget(self)
         suctionDock.setWidget(suctionWidget)
 
@@ -176,20 +177,17 @@ class Window(QMainWindow):
         suctionWidget.setLayout(grid)
 
     def suction_button_pressed(self):
-        # todo: changes colors depending on if the suction is successful and changes the robot class suction
-        #       to True if it works
-
+        # Checking if the button is already pressed
         if self.suction_button.isChecked():
             self.robot.suction = False
-            self.suction_button.setStyleSheet("background-color: rgb(225,225,225)")
+            self.suction_button.setStyleSheet("background-color: rgb(225,225,225)")  # Neutral color
         else:
+            # checking if the end-effector of the robot arm is touching the square item
             if self.robot_graphics.endeff.collidesWithItem(self.square_graphics):
                 self.robot.suction = True
-
-
-                self.suction_button.setStyleSheet("background-color: green")
+                self.suction_button.setStyleSheet("background-color: green")  # Green color = success
             else:
-                self.suction_button.setStyleSheet("background-color: rgb(171,46,70)")
+                self.suction_button.setStyleSheet("background-color: rgb(171,46,70)")  # Red color = failure
 
     '''-------------------------------------------------------------------------'''
     '''setting up the central widget as graphics view, scene and add graphic items'''

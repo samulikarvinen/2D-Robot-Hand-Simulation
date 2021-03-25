@@ -5,6 +5,7 @@ from PyQt5.QtCore import *
 
 class SquareGraphicsItem(QGraphicsRectItem):
     def __init__(self, square):
+        # Initializing a square which some nice color
         super(SquareGraphicsItem, self).__init__()
         self.square = square
         self.setRect(0, 0, self.square.width, self.square.height)
@@ -12,4 +13,5 @@ class SquareGraphicsItem(QGraphicsRectItem):
         self.setBrush(QBrush(QGradient(QGradient.JuicyCake)))
 
     def update_position(self):
+        # update based on the new values
         self.setPos(self.square.location[0]-self.square.width/2, self.square.location[1]-self.square.height/2)
