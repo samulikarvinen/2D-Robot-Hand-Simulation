@@ -23,7 +23,7 @@ class Robot:
 
         # update the robot graphics and square graphics item
         robot_graphics.update_pose()
-        square_graphics.update_position()
+        square_graphics.update_pose()
 
     def move_with_coordinates(self, window, x, y):
         # todo: Linear movement towards the destined coordinate; update graphics in each loop
@@ -51,7 +51,7 @@ class Robot:
 
         # if suction is True, it means that the square has been sucked by the robot --> same coordinate as end-effector
         if self.suction:
-            square.set_location(self.coord2)
+            square.set_pose(self.coord2, math.degrees(theta1), math.degrees(theta2))
 
     def inverse_kinematics(self, coordinates):
         # todo: Change joint angles in degrees based on the given coordinates
