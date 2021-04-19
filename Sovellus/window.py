@@ -185,6 +185,8 @@ class Window(QMainWindow):
             # checking if the end-effector of the robot arm is touching the square item
             if self.robot_graphics.endeff.collidesWithItem(self.square_graphics):
                 self.robot.suction = True
+                # the difference between the robot hand and the square angles, in order to keep the rotation natural.
+                self.square.rotation_difference = self.square.rotation - (self.robot.theta1 + self.robot.theta2)
                 self.suction_button.setStyleSheet("background-color: green")  # Green color = success
             else:
                 self.suction_button.setStyleSheet("background-color: rgb(171,46,70)")  # Red color = failure

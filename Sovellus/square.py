@@ -15,8 +15,10 @@ class Square:
         y = r * math.sin(alpha)
         self.location = x, y
         self.rotation = 0
+        self.rotation_difference = 0
 
     def set_pose(self, location, theta1, theta2):
         # setting a new location based on the updated location
         self.location = location
-        self.rotation = theta1 + theta2
+        angle = theta1 + theta2
+        self.rotation = angle + self.rotation_difference
