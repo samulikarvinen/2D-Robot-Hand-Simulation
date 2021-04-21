@@ -58,7 +58,7 @@ class Window(QMainWindow):
         grid.addWidget(self.label_first_theta, 0, 1)
 
         self.first_slider = QSlider(Qt.Horizontal)
-        self.first_slider.setRange(0, 36000)  # 360 000 in order to have 0.01 increments from 0 to 360 degrees
+        self.first_slider.setRange(-18000, 18000)  # 360 000 in order to have 0.01 increments from 0 to 360 degrees
         self.first_slider.setTickPosition(QSlider.TicksAbove)
         self.first_slider.setTickInterval(3600)
         grid.addWidget(self.first_slider, 1, 0, 1, 2)
@@ -71,7 +71,7 @@ class Window(QMainWindow):
         grid.addWidget(self.label_second_theta, 2, 1)
 
         self.second_slider = QSlider(Qt.Horizontal)
-        self.second_slider.setRange(0, 36000)  # 36 000 in order to have 0.01 increments from 0 to 360 degrees
+        self.second_slider.setRange(-18000, 18000)  # 36 000 in order to have 0.01 increments from 0 to 360 degrees
         self.second_slider.setTickPosition(QSlider.TicksAbove)
         self.second_slider.setTickInterval(3600)
         grid.addWidget(self.second_slider, 3, 0, 1, 2)
@@ -81,14 +81,22 @@ class Window(QMainWindow):
         manualWidget.setLayout(grid)
 
     def first_slider_value_changed(self):
-        theta1 = self.first_slider.value()*0.01  # from increments to degrees
-        self.label_first_theta.setText("{:.2f}\u00B0".format(theta1))
-        self.robot.move_with_angles(self.robot_graphics, self.square, self.square_graphics, theta1, self.robot.theta2)
+        if self.robot.automatic:
+            theta1 = self.first_slider.value() / 100
+            self.label_first_theta.setText("{:.2f}\u00B0".format(theta1))
+        else:
+            theta1 = self.first_slider.value()*0.01  # from increments to degrees
+            self.label_first_theta.setText("{:.2f}\u00B0".format(theta1))
+            self.robot.move_with_angles(self.robot_graphics, self.square, self.square_graphics, theta1, self.robot.theta2)
 
     def second_slider_value_changed(self):
-        theta2 = self.second_slider.value()*0.01  # from increments to degrees
-        self.label_second_theta.setText("{:.2f}\u00B0".format(theta2))
-        self.robot.move_with_angles(self.robot_graphics, self.square, self.square_graphics, self.robot.theta1, theta2)
+        if self.robot.automatic:
+            theta2 = self.second_slider.value() / 100
+            self.label_second_theta.setText("{:.2f}\u00B0".format(theta2))
+        else:
+            theta2 = self.second_slider.value()*0.01  # from increments to degrees
+            self.label_second_theta.setText("{:.2f}\u00B0".format(theta2))
+            self.robot.move_with_angles(self.robot_graphics, self.square, self.square_graphics, self.robot.theta1, theta2)
 
     '''--------------------------------------------------------------'''
     '''Setting up the auto dock its buttons and their functionalities'''

@@ -15,6 +15,7 @@ class Robot:
         self.coord1 = np.array([self.len1, 0])  # second angle initial position
         self.coord2 = np.array([self.len1 + self.len2, 0])   # end-effector initial position
         self.suction = False
+        self.automatic = False
 
     def move_with_angles(self, robot_graphics, square, square_graphics, theta1, theta2):
         # updating the angles
@@ -37,6 +38,9 @@ class Robot:
         coord_initial = self.coord2
         coord_final = np.array([x, y])
 
+        # using a variable to distinguish between the user and automatic movement for the slider
+        self.automatic = True
+
         # update graphics in each loop
         for s in np.arange(0, 1.01, 0.01):
             # change in end-effector coordinate
@@ -56,12 +60,8 @@ class Robot:
                 square.set_pose(self.coord2, self.theta1, self.theta2)
 
             # update the sliders
-            window.first_slider.setValue(self.theta1)
-            window.second_slider.setValue(self.theta2)
-
-            # update the labels for the sliders
-            window.label_first_theta.setText("{:.2f}\u00B0".format(self.theta1))
-            window.label_second_theta.setText("{:.2f}\u00B0".format(self.theta2))
+            window.first_slider.setValue(self.theta1 * 100)
+            window.second_slider.setValue(self.theta2 * 100)
 
             # update the robot graphics and square graphics item
             robot_graphics.update_pose()
@@ -72,6 +72,9 @@ class Robot:
 
             # wait for a certain time so that the animation looks smoother
             sleep(0.01)
+
+        # Back to the user control
+        self.automatic = False
 
     def forward_kinematics(self, theta1, theta2):
         # changing into radians for easier calculation
