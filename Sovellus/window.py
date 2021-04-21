@@ -71,7 +71,7 @@ class Window(QMainWindow):
         grid.addWidget(self.label_second_theta, 2, 1)
 
         self.second_slider = QSlider(Qt.Horizontal)
-        self.second_slider.setRange(0, 36000)  # 360 000 in order to have 0.01 increments from 0 to 360 degrees
+        self.second_slider.setRange(0, 36000)  # 36 000 in order to have 0.01 increments from 0 to 360 degrees
         self.second_slider.setTickPosition(QSlider.TicksAbove)
         self.second_slider.setTickInterval(3600)
         grid.addWidget(self.second_slider, 3, 0, 1, 2)
@@ -114,14 +114,14 @@ class Window(QMainWindow):
         # adding the x coordinate sections
         label_x_line = QLabel("x:")
         grid.addWidget(label_x_line, 1, 0)
-        self.x_line = QLineEdit('0')
+        self.x_line = QLineEdit('50')
         self.x_line.setValidator(QIntValidator())
         grid.addWidget(self.x_line, 1, 1)
 
         # adding the y coordinate sections
         label_y_line = QLabel("y:")
         grid.addWidget(label_y_line, 2, 0)
-        self.y_line = QLineEdit('0')
+        self.y_line = QLineEdit('50')
         self.y_line.setValidator(QIntValidator())
         grid.addWidget(self.y_line, 2, 1)
 
@@ -145,9 +145,10 @@ class Window(QMainWindow):
         if self.x_line.text() and self.y_line.text():
             x = int(self.x_line.text())
             y = int(self.y_line.text())
-            if sqrt(x**2 + y**2) <= (self.robot.len1 + self.robot.len2):
+            if sqrt(x**2 + y**2) <= (self.robot.len1 + self.robot.len2) and (x, y) != (0, 0):
+                # hides the warning label and moves linearly towards the coordinate (x, y)
                 self.label_reach.hide()
-            # TODO: add info to robot which updates the graphics
+                self.robot.move_with_coordinates(self, app, self.robot_graphics, self.square, self.square_graphics, x, y)
             else:
                 self.label_reach.show()
 

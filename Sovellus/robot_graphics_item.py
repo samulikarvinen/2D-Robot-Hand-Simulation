@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
+import numpy as np
 
 
 class RobotGraphicsItem(QGraphicsItemGroup):
@@ -13,8 +14,8 @@ class RobotGraphicsItem(QGraphicsItemGroup):
         self.link1_thick = 28
         self.joint1_thick = 20
         self.link2_thick = 25
-        self.joint2_thick = 18
-        self.endeff_thick = 23
+        self.joint2_thick = 20
+        self.endeff_thick = 18
         self.platform_thick = 50
 
         # add platform

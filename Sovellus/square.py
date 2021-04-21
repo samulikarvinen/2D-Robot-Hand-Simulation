@@ -1,5 +1,6 @@
 import math
 import random
+import numpy as np
 
 
 class Square:
@@ -13,7 +14,7 @@ class Square:
         r = radius * math.sqrt(random.random())
         x = r * math.cos(alpha)
         y = r * math.sin(alpha)
-        self.location = x, y
+        self.location = np.array([x, y])
         self.rotation = 0
         self.rotation_difference = 0
 
