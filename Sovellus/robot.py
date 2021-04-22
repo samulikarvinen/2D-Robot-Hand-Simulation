@@ -52,7 +52,7 @@ class Robot:
             # use inverse kinematics to update the new angles for the joints
             self.inverse_kinematics(self.coord2[0], self.coord2[1], theta2_initial)
 
-            # calculating the joint coordinate of the second joint using forward kinematics
+            # calculating the joint coordinate of the second joint using the angles from inverse kinematics
             self.coord1[0] = self.len1 * math.cos(self.theta1)
             self.coord1[1] = self.len1 * math.sin(self.theta1)
 
@@ -103,19 +103,11 @@ class Robot:
 
     def inverse_kinematics(self, x, y, theta2_initial):
         # calculating the angles in radians
-        if x == 0:
-            if theta2_initial < 0:
-                self.theta2 = math.acos((x**2 + y**2 - self.len1**2 - self.len2**2) / (2 * self.len1 * self.len2))
-                self.theta1 = math.pi / 2 + math.atan2((self.len2 * math.sin(self.theta2)), (self.len1 + self.len2 * math.cos(self.theta2)))
-            else:
-                self.theta2 = math.acos((x ** 2 + y ** 2 - self.len1 ** 2 - self.len2 ** 2) / (2 * self.len1 * self.len2))
-                self.theta1 = math.pi / 2 - math.atan2((self.len2 * math.sin(self.theta2)), (self.len1 + self.len2 * math.cos(self.theta2)))
+        if theta2_initial < 0:
+            self.theta2 = math.acos((x**2 + y**2 - self.len1**2 - self.len2**2) / (2 * self.len1 * self.len2))
+            self.theta1 = math.atan2(y, x) + math.atan2((self.len2 * math.sin(self.theta2)), (self.len1 + self.len2 * math.cos(self.theta2)))
         else:
-            if theta2_initial < 0:
-                self.theta2 = math.acos((x**2 + y**2 - self.len1**2 - self.len2**2) / (2 * self.len1 * self.len2))
-                self.theta1 = math.atan2(y, x) + math.atan2((self.len2 * math.sin(self.theta2)), (self.len1 + self.len2 * math.cos(self.theta2)))
-            else:
-                self.theta2 = math.acos((x ** 2 + y ** 2 - self.len1 ** 2 - self.len2 ** 2) / (2 * self.len1 * self.len2))
-                self.theta1 = math.atan2(y, x) - math.atan2((self.len2 * math.sin(self.theta2)), (self.len1 + self.len2 * math.cos(self.theta2)))
+            self.theta2 = math.acos((x ** 2 + y ** 2 - self.len1 ** 2 - self.len2 ** 2) / (2 * self.len1 * self.len2))
+            self.theta1 = math.atan2(y, x) - math.atan2((self.len2 * math.sin(self.theta2)), (self.len1 + self.len2 * math.cos(self.theta2)))
 
 
