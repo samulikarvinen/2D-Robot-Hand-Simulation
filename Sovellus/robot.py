@@ -38,6 +38,9 @@ class Robot:
         coord_initial = self.coord2
         coord_final = np.array([x, y])
 
+        # this variable is used to determine how to move the arm
+        theta2_initial = self.theta2
+
         # using a variable to distinguish between the user and automatic movement for the slider
         self.automatic = True
 
@@ -47,17 +50,20 @@ class Robot:
             self.coord2 = (1 - s) * coord_initial + s * coord_final
 
             # use inverse kinematics to update the new angles for the joints
-            self.inverse_kinematics(self.coord2[0], self.coord2[1])
+            self.inverse_kinematics(self.coord2[0], self.coord2[1], theta2_initial)
 
-            # in order to draw the robot hand, we also need to update the coordinates of the joints, the coordinates
-            # of the end-effector are already known, but to make this look smoother, I'll use the joint angles to
-            # calculate both joint coordinates
-            self.forward_kinematics(self.theta1, self.theta2)
+            # calculating the joint coordinate of the second joint using forward kinematics
+            self.coord1[0] = self.len1 * math.cos(self.theta1)
+            self.coord1[1] = self.len1 * math.sin(self.theta1)
 
             # if suction is True, it means that the square has been sucked by the robot
             # --> same coordinate as end-effector
             if self.suction:
                 square.set_pose(self.coord2, self.theta1, self.theta2)
+
+            # changing joint angles in degrees for better interpretation
+            self.theta1 = math.degrees(self.theta1)
+            self.theta2 = math.degrees(self.theta2)
 
             # update the sliders
             window.first_slider.setValue(self.theta1 * 100)
@@ -95,20 +101,21 @@ class Robot:
         # changing the coordinates of the end-effector
         self.coord2 = np.array([x2, y2])
 
-    def inverse_kinematics(self, x, y):
-        # calculating the distance from the origin to the end-effector, which is used in the calculation
-        len3 = math.sqrt(x**2 + y**2)
-
+    def inverse_kinematics(self, x, y, theta2_initial):
         # calculating the angles in radians
         if x == 0:
-            self.theta1 = math.pi / 2 + math.acos((self.len1 ** 2 + len3 ** 2 - self.len2 ** 2) / (2 * self.len1 * len3))
-            self.theta2 = math.acos((self.len1 ** 2 + self.len2 ** 2 - len3 ** 2) / (2 * self.len1 * self.len2)) - math.pi
+            if theta2_initial < 0:
+                self.theta2 = math.acos((x**2 + y**2 - self.len1**2 - self.len2**2) / (2 * self.len1 * self.len2))
+                self.theta1 = math.pi / 2 + math.atan2((self.len2 * math.sin(self.theta2)), (self.len1 + self.len2 * math.cos(self.theta2)))
+            else:
+                self.theta2 = math.acos((x ** 2 + y ** 2 - self.len1 ** 2 - self.len2 ** 2) / (2 * self.len1 * self.len2))
+                self.theta1 = math.pi / 2 - math.atan2((self.len2 * math.sin(self.theta2)), (self.len1 + self.len2 * math.cos(self.theta2)))
         else:
-            self.theta1 = math.atan(y / x) + math.acos((self.len1**2 + len3**2 - self.len2**2) / (2 * self.len1 * len3))
-            self.theta2 = math.acos((self.len1**2 + self.len2**2 - len3**2) / (2 * self.len1 * self.len2)) - math.pi
-
-        # changing into degrees
-        self.theta1 = math.degrees(self.theta1)
-        self.theta2 = math.degrees(self.theta2)
+            if theta2_initial < 0:
+                self.theta2 = math.acos((x**2 + y**2 - self.len1**2 - self.len2**2) / (2 * self.len1 * self.len2))
+                self.theta1 = math.atan2(y, x) + math.atan2((self.len2 * math.sin(self.theta2)), (self.len1 + self.len2 * math.cos(self.theta2)))
+            else:
+                self.theta2 = math.acos((x ** 2 + y ** 2 - self.len1 ** 2 - self.len2 ** 2) / (2 * self.len1 * self.len2))
+                self.theta1 = math.atan2(y, x) - math.atan2((self.len2 * math.sin(self.theta2)), (self.len1 + self.len2 * math.cos(self.theta2)))
 
 

@@ -135,7 +135,7 @@ class Window(QMainWindow):
 
         '''adding the move button section'''
         # label
-        self.label_reach = QLabel("Out of reach!")
+        self.label_reach = QLabel("Invalid location!")
         self.label_reach.setAlignment(Qt.AlignCenter | Qt.AlignHCenter)
         self.label_reach.hide()
         grid.addWidget(self.label_reach, 3, 0, 1, 2)
