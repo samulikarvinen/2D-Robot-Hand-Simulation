@@ -135,7 +135,7 @@ class Window(QMainWindow):
 
         '''adding the move button section'''
         # label
-        self.label_reach = QLabel("Invalid location!")
+        self.label_reach = QLabel("Out of reach!")
         self.label_reach.setAlignment(Qt.AlignCenter | Qt.AlignHCenter)
         self.label_reach.hide()
         grid.addWidget(self.label_reach, 3, 0, 1, 2)
@@ -153,7 +153,7 @@ class Window(QMainWindow):
         if self.x_line.text() and self.y_line.text():
             x = int(self.x_line.text())
             y = int(self.y_line.text())
-            if sqrt(x**2 + y**2) <= (self.robot.len1 + self.robot.len2) and (x, y) != (0, 0):
+            if sqrt(x**2 + y**2) <= (self.robot.len1 + self.robot.len2):
                 # hides the warning label and moves linearly towards the coordinate (x, y)
                 self.label_reach.hide()
                 self.robot.move_with_coordinates(self, app, self.robot_graphics, self.square, self.square_graphics, x, y)
