@@ -45,7 +45,7 @@ class Robot:
         self.automatic = True
 
         # update graphics in each loop
-        for s in np.arange(0, 1.01, 0.01):
+        for s in np.arange(0, 1.001, 0.001):
             # change in end-effector coordinate
             self.coord2 = (1 - s) * coord_initial + s * coord_final
 
@@ -77,7 +77,7 @@ class Robot:
             app.processEvents()
 
             # wait for a certain time so that the animation looks smoother
-            sleep(0.01)
+            sleep(0.001)
 
         # Back to the user control
         self.automatic = False
