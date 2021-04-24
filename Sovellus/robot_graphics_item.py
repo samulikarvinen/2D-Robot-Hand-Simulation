@@ -58,10 +58,20 @@ class RobotGraphicsItem(QGraphicsItemGroup):
         self.endeff.setBrush(QBrush(QColor("black")))
         self.addToGroup(self.endeff)
 
+        # add the coordinate of the end-effector as a text item
+        text = "(" + str(round(self.robot.coord2[0])) + ", " + str(round(self.robot.coord2[1])) + ")"
+        self.endeff_text = QGraphicsSimpleTextItem(text, self.endeff)
+        self.endeff_text.setBrush(QBrush(QColor("cyan")))
+
+
+
     def update_pose(self):
         # update with the new updated information
         self.link1.setLine(0, 0, self.robot.coord1[0], self.robot.coord1[1])
         self.link2.setLine(self.robot.coord1[0], self.robot.coord1[1], self.robot.coord2[0], self.robot.coord2[1])
         self.joint2.setPos(self.robot.coord1[0]-self.joint2_thick/2, self.robot.coord1[1]-self.joint2_thick/2)
         self.endeff.setPos(self.robot.coord2[0]-self.endeff_thick/2, self.robot.coord2[1]-self.endeff_thick/2)
+
+        # update the coordinate text of the end-effector
+        self.endeff_text.setText("(" + str(round(self.robot.coord2[0])) + ", " + str(round(self.robot.coord2[1])) + ")")
 
