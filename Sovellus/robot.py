@@ -17,7 +17,7 @@ class Robot:
         self.suction = False
         self.automatic = False
 
-    def move_with_angles(self, robot_graphics, square, square_graphics, theta1, theta2):
+    def move_with_angles(self, robot_graphics, square, square_graphics, text_graphics, theta1, theta2):
         # updating the angles
         self.theta1 = theta1
         self.theta2 = theta2
@@ -29,11 +29,12 @@ class Robot:
         if self.suction:
             square.set_pose(self.coord2, self.theta1, self.theta2)
 
-        # update the robot graphics and square graphics item
+        # update the robot graphics square graphics item and text graphics item
         robot_graphics.update_pose()
         square_graphics.update_pose()
+        text_graphics.update_text()
 
-    def move_with_coordinates(self, window, app, robot_graphics, square, square_graphics, x, y):
+    def move_with_coordinates(self, window, app, robot_graphics, square, square_graphics, text_graphics, x, y):
         # the initial and final coordinate of the end-effector
         coord_initial = self.coord2
         coord_final = np.array([x, y])
@@ -56,22 +57,23 @@ class Robot:
             self.coord1[0] = self.len1 * math.cos(self.theta1)
             self.coord1[1] = self.len1 * math.sin(self.theta1)
 
+            # changing joint angles in degrees for better interpretation
+            self.theta1 = math.degrees(self.theta1)
+            self.theta2 = math.degrees(self.theta2)
+
             # if suction is True, it means that the square has been sucked by the robot
             # --> same coordinate as end-effector
             if self.suction:
                 square.set_pose(self.coord2, self.theta1, self.theta2)
 
-            # changing joint angles in degrees for better interpretation
-            self.theta1 = math.degrees(self.theta1)
-            self.theta2 = math.degrees(self.theta2)
-
             # update the sliders
             window.first_slider.setValue(self.theta1 * 100)
             window.second_slider.setValue(self.theta2 * 100)
 
-            # update the robot graphics and square graphics item
+            # update the robot graphics square graphics item and text graphics item
             robot_graphics.update_pose()
             square_graphics.update_pose()
+            text_graphics.update_text()
 
             # show graphics
             app.processEvents()
@@ -104,8 +106,8 @@ class Robot:
     def inverse_kinematics(self, x, y, theta2_initial):
         # calculating the angles in radians
         if theta2_initial < 0:
-            self.theta2 = math.acos((x**2 + y**2 - self.len1**2 - self.len2**2) / (2 * self.len1 * self.len2))
-            self.theta1 = math.atan2(y, x) + math.atan2((self.len2 * math.sin(self.theta2)), (self.len1 + self.len2 * math.cos(self.theta2)))
+            self.theta2 = - math.acos((x**2 + y**2 - self.len1**2 - self.len2**2) / (2 * self.len1 * self.len2))
+            self.theta1 = math.atan2(y, x) - math.atan2((self.len2 * math.sin(self.theta2)), (self.len1 + self.len2 * math.cos(self.theta2)))
         else:
             self.theta2 = math.acos((x ** 2 + y ** 2 - self.len1 ** 2 - self.len2 ** 2) / (2 * self.len1 * self.len2))
             self.theta1 = math.atan2(y, x) - math.atan2((self.len2 * math.sin(self.theta2)), (self.len1 + self.len2 * math.cos(self.theta2)))

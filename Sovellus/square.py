@@ -21,5 +21,7 @@ class Square:
     def set_pose(self, location, theta1, theta2):
         # setting a new location based on the updated location
         self.location = location
+
+        # rotate the square
         angle = theta1 + theta2
         self.rotation = angle + self.rotation_difference

@@ -4,17 +4,17 @@ from robot import Robot
 from robot_graphics_item import RobotGraphicsItem
 from square import Square
 from square_graphics_item import SquareGraphicsItem
+from text_graphics_item import TextGraphicsItem
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 
 
 class Window(QMainWindow):
-
-    def __init__(self):
-        super().__init__()
+    def __init__(self, *args, **kwargs):
+        super(Window, self).__init__(*args, **kwargs)
         # setting up the window
-        self.setWindowTitle("Robot hand 9000")
+        self.setWindowTitle("Robot arm 9000")
         self.setFixedSize(QSize(1080, 720))
 
         # setting up the objects
@@ -87,7 +87,8 @@ class Window(QMainWindow):
         else:
             theta1 = self.first_slider.value()*0.01  # from increments to degrees
             self.label_first_theta.setText("{:.2f}\u00B0".format(theta1))
-            self.robot.move_with_angles(self.robot_graphics, self.square, self.square_graphics, theta1, self.robot.theta2)
+            self.robot.move_with_angles(self.robot_graphics, self.square, self.square_graphics, self.text_graphics,
+                                        theta1, self.robot.theta2)
 
     def second_slider_value_changed(self):
         if self.robot.automatic:
@@ -96,7 +97,8 @@ class Window(QMainWindow):
         else:
             theta2 = self.second_slider.value()*0.01  # from increments to degrees
             self.label_second_theta.setText("{:.2f}\u00B0".format(theta2))
-            self.robot.move_with_angles(self.robot_graphics, self.square, self.square_graphics, self.robot.theta1, theta2)
+            self.robot.move_with_angles(self.robot_graphics, self.square, self.square_graphics, self.text_graphics,
+                                        self.robot.theta1, theta2)
 
     '''--------------------------------------------------------------'''
     '''Setting up the auto dock its buttons and their functionalities'''
@@ -156,7 +158,7 @@ class Window(QMainWindow):
             if sqrt(x**2 + y**2) <= (self.robot.len1 + self.robot.len2):
                 # hides the warning label and moves linearly towards the coordinate (x, y)
                 self.label_reach.hide()
-                self.robot.move_with_coordinates(self, app, self.robot_graphics, self.square, self.square_graphics, x, y)
+                self.robot.move_with_coordinates(self, app, self.robot_graphics, self.square, self.square_graphics, self.text_graphics, x, y)
             else:
                 self.label_reach.show()
 
@@ -210,11 +212,13 @@ class Window(QMainWindow):
         # setting up the graphical items
         self.square_graphics = SquareGraphicsItem(self.square)
         self.robot_graphics = RobotGraphicsItem(self.robot)
+        self.text_graphics = TextGraphicsItem(self.robot, self.square)
 
         # setting up the scene and add items
         self.scene = QGraphicsScene()
         self.scene.addItem(self.square_graphics)
         self.scene.addItem(self.robot_graphics)
+        self.scene.addItem(self.text_graphics)
 
         # setting the scene to the view
         self.graphicsview.setScene(self.scene)
