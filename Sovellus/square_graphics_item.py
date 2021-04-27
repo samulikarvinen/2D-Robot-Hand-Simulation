@@ -4,7 +4,7 @@ from PyQt5.QtGui import *
 
 class SquareGraphicsItem(QGraphicsRectItem):
     def __init__(self, square):
-        # Initializing a square which some nice color
+        # initializing a square which some nice color
         super(SquareGraphicsItem, self).__init__()
         self.square = square
         self.setRect(0, 0, self.square.width, self.square.height)

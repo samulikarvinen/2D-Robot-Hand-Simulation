@@ -17,12 +17,12 @@ class Robot:
         self.automatic = False
 
     def move_with_angles(self, robot_graphics, square, square_graphics, text_graphics, theta1, theta2):
-        # updating the angles
+        # updating the angles as degrees
         self.theta1 = theta1
         self.theta2 = theta2
 
-        # updates the coordinates of the robot based on the new angles
-        self.forward_kinematics(self.theta1, self.theta2)
+        # updates the coordinates of the robot based on the new angles in radians
+        self.forward_kinematics(math.radians(self.theta1), math.radians(self.theta2))
 
         # if suction is True, it means that the square has been sucked by the robot --> same coordinate as end-effector
         if self.suction:
@@ -41,7 +41,7 @@ class Robot:
         # this variable is used to determine how to move the arm
         theta2_initial = self.theta2
 
-        # using a variable to distinguish between the user and automatic movement for the slider
+        # using a variable to distinguish between the user and automatic control for the slider
         self.automatic = True
 
         # update graphics in each loop
@@ -69,7 +69,7 @@ class Robot:
             window.first_slider.setValue(self.theta1 * 100)
             window.second_slider.setValue(self.theta2 * 100)
 
-            # update the robot graphics square graphics item and text graphics item
+            # update the robot graphics item, square graphics item and text graphics item
             robot_graphics.update_pose()
             square_graphics.update_pose()
             text_graphics.update_text()
@@ -80,35 +80,34 @@ class Robot:
             # wait for a certain time so that the animation looks smoother
             sleep(0.001)
 
-        # Back to the user control
+        # back to the user control
         self.automatic = False
 
-    def forward_kinematics(self, theta1, theta2):
-        # changing into radians for easier calculation
-        theta1 = math.radians(theta1)
-        theta2 = math.radians(theta2)
-
-        # calculating the coordinates of the second joint (forward kinematics)
+    def forward_kinematics(self, theta1, theta2):  # in radians
+        # calculating the coordinates of the second joint
         x1 = self.len1 * math.cos(theta1)
         y1 = self.len1 * math.sin(theta1)
 
         # changing the coordinates of the second joint
         self.coord1 = np.array([x1, y1])
 
-        # calculating the coordinates of the end-effector (forward kinematics)
+        # calculating the coordinates of the end-effector
         x2 = x1 + self.len2 * math.cos(theta1 + theta2)
         y2 = y1 + self.len2 * math.sin(theta1 + theta2)
 
         # changing the coordinates of the end-effector
         self.coord2 = np.array([x2, y2])
 
-    def inverse_kinematics(self, x, y, theta2_initial):
-        # calculating the angles in radians
+    def inverse_kinematics(self, x, y, theta2_initial):  # in radians
+        # calculating the angles theta1 and theta2
+        # the if-condition identifies the correct inverse kinematics formula for the current robot arm pose
         if theta2_initial < 0:
             self.theta2 = - math.acos((x**2 + y**2 - self.len1**2 - self.len2**2) / (2 * self.len1 * self.len2))
-            self.theta1 = math.atan2(y, x) - math.atan2((self.len2 * math.sin(self.theta2)), (self.len1 + self.len2 * math.cos(self.theta2)))
+            self.theta1 = math.atan2(y, x) - math.atan2((self.len2 * math.sin(self.theta2)),
+                                                        (self.len1 + self.len2 * math.cos(self.theta2)))
         else:
             self.theta2 = math.acos((x ** 2 + y ** 2 - self.len1 ** 2 - self.len2 ** 2) / (2 * self.len1 * self.len2))
-            self.theta1 = math.atan2(y, x) - math.atan2((self.len2 * math.sin(self.theta2)), (self.len1 + self.len2 * math.cos(self.theta2)))
+            self.theta1 = math.atan2(y, x) - math.atan2((self.len2 * math.sin(self.theta2)),
+                                                        (self.len1 + self.len2 * math.cos(self.theta2)))
 
 

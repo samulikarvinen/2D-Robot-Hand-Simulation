@@ -5,11 +5,11 @@ from PyQt5.QtCore import *
 
 class RobotGraphicsItem(QGraphicsItemGroup):
     def __init__(self, robot):
-        # Grouping up two lines, one square and three circles to build a graphical robot
+        # grouping up two lines, one square and three circles to build a graphical robot
         super(RobotGraphicsItem, self).__init__()
         self.robot = robot
 
-        # Dimensions of the graphic items
+        # dimensions of the graphic items
         self.link1_thick = 28
         self.joint1_thick = 20
         self.link2_thick = 25
@@ -56,9 +56,6 @@ class RobotGraphicsItem(QGraphicsItemGroup):
         self.endeff.setPos(self.robot.coord2[0]-self.endeff_thick/2, self.robot.coord2[1]-self.endeff_thick/2)
         self.endeff.setBrush(QBrush(QColor("black")))
         self.addToGroup(self.endeff)
-
-
-
 
     def update_pose(self):
         # update with the new updated information

@@ -17,26 +17,28 @@ class Window(QMainWindow):
         self.setWindowTitle("Robot arm 9000")
         self.setFixedSize(QSize(1080, 720))
 
-        # setting up the objects
+        # setting up the dimensions of the items
         link1 = 150
         link2 = 150
         radius = link1 + link2
         square_width = 50
         square_height = 50
 
+        # setting up the items
         self.robot = Robot(link1, link2)  # lengths of the links
         self.square = Square(square_width, square_height, radius)  # add size
 
-        # setting up the docks
+        # setting up the docks for the window
         self.set_manualdock()
         self.set_autodock()
         self.set_suctiondock()
 
-        # setting up the graphics
+        # setting up the graphics for the window
         self.set_graphics()
 
-    '''---------------------------------------------------------------------'''
-    '''Setting up the manual dock with its buttons and their functionalities'''
+    '''----------------------------------------------------------------------'''
+    '''Setting up the manual dock with its buttons and their functionalities.'''
+    '''----------------------------------------------------------------------'''
     def set_manualdock(self):
         manualDock = QDockWidget()
         manualDock.setWindowTitle("Manual Control")
@@ -51,12 +53,13 @@ class Window(QMainWindow):
         # building layout
         grid = QGridLayout()
 
-        # adding first label and slider for the layout
+        # adding first label for the layout
         label_first_slider = QLabel("1. joint \u03B8\u2081:")
         grid.addWidget(label_first_slider, 0, 0)
         self.label_first_theta = QLabel("{:.2f}\u00B0".format(0))
         grid.addWidget(self.label_first_theta, 0, 1)
 
+        # adding the first slider for the layout
         self.first_slider = QSlider(Qt.Horizontal)
         self.first_slider.setRange(-18000, 18000)  # 360 000 in order to have 0.01 increments from 0 to 360 degrees
         self.first_slider.setTickPosition(QSlider.TicksAbove)
@@ -64,12 +67,13 @@ class Window(QMainWindow):
         grid.addWidget(self.first_slider, 1, 0, 1, 2)
         self.first_slider.valueChanged.connect(self.first_slider_value_changed)
 
-        # adding second label and slider for the layout
+        # adding second label for the layout
         label_second_slider = QLabel("2. joint \u03B8\u2082:")
         grid.addWidget(label_second_slider, 2, 0)
         self.label_second_theta = QLabel("{:.2f}\u00B0".format(0))
         grid.addWidget(self.label_second_theta, 2, 1)
 
+        # adding the second slider for the layout
         self.second_slider = QSlider(Qt.Horizontal)
         self.second_slider.setRange(-18000, 18000)  # 36 000 in order to have 0.01 increments from 0 to 360 degrees
         self.second_slider.setTickPosition(QSlider.TicksAbove)
@@ -82,7 +86,7 @@ class Window(QMainWindow):
 
     def first_slider_value_changed(self):
         if self.robot.automatic:
-            theta1 = self.first_slider.value() / 100
+            theta1 = self.first_slider.value()*0.01  # from increments to degrees
             self.label_first_theta.setText("{:.2f}\u00B0".format(theta1))
         else:
             theta1 = self.first_slider.value()*0.01  # from increments to degrees
@@ -92,7 +96,7 @@ class Window(QMainWindow):
 
     def second_slider_value_changed(self):
         if self.robot.automatic:
-            theta2 = self.second_slider.value() / 100
+            theta2 = self.second_slider.value()*0.01  # from increments to degrees
             self.label_second_theta.setText("{:.2f}\u00B0".format(theta2))
         else:
             theta2 = self.second_slider.value()*0.01  # from increments to degrees
@@ -100,8 +104,9 @@ class Window(QMainWindow):
             self.robot.move_with_angles(self.robot_graphics, self.square, self.square_graphics, self.text_graphics,
                                         self.robot.theta1, theta2)
 
-    '''--------------------------------------------------------------'''
-    '''Setting up the auto dock its buttons and their functionalities'''
+    '''--------------------------------------------------------------------'''
+    '''Setting up the auto dock with its buttons and their functionalities.'''
+    '''--------------------------------------------------------------------'''
     def set_autodock(self):
         autoDock = QDockWidget()
         autoDock.setWindowTitle("Auto Control")
@@ -162,8 +167,9 @@ class Window(QMainWindow):
             else:
                 self.label_reach.show()
 
-    '''-----------------------------------------------------------------'''
-    '''Setting up the suction dock its buttons and their functionalities'''
+    '''-----------------------------------------------------------------------'''
+    '''Setting up the suction dock with its buttons and their functionalities.'''
+    '''-----------------------------------------------------------------------'''
     def set_suctiondock(self):
         suctionDock = QDockWidget()
         suctionDock.setWindowTitle("Suction")
@@ -202,8 +208,9 @@ class Window(QMainWindow):
             else:
                 self.suction_button.setStyleSheet("background-color: rgb(171,46,70)")  # Red color = failure
 
-    '''-------------------------------------------------------------------------'''
-    '''setting up the central widget as graphics view, scene and add graphic items'''
+    '''----------------------------------------------------------------------------------------------------'''
+    '''Setting up the central widget as graphics view, which include a scene where graphic items are added.'''
+    '''----------------------------------------------------------------------------------------------------'''
     def set_graphics(self):
         # setting up the central widget as graphics view
         self.graphicsview = QGraphicsView()
