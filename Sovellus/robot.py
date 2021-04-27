@@ -1,6 +1,5 @@
 import math
 import numpy as np
-from time import sleep
 
 
 class Robot:
@@ -56,7 +55,7 @@ class Robot:
             self.coord1[0] = self.len1 * math.cos(self.theta1)
             self.coord1[1] = self.len1 * math.sin(self.theta1)
 
-            # changing joint angles in degrees for better interpretation
+            # changing joint angles in degrees for better interpretation and for graphics
             self.theta1 = math.degrees(self.theta1)
             self.theta2 = math.degrees(self.theta2)
 
@@ -76,9 +75,6 @@ class Robot:
 
             # show graphics
             app.processEvents()
-
-            # wait for a certain time so that the animation looks smoother
-            sleep(0.001)
 
         # back to the user control
         self.automatic = False
