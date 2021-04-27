@@ -10,12 +10,12 @@ class RobotGraphicsItem(QGraphicsItemGroup):
         self.robot = robot
 
         # dimensions of the graphic items
+        self.platform_thick = 40
         self.link1_thick = 28
         self.joint1_thick = 20
         self.link2_thick = 25
-        self.joint2_thick = 20
+        self.joint2_thick = 18
         self.endeff_thick = 18
-        self.platform_thick = 50
 
         # add platform
         self.platform = QGraphicsRectItem()
