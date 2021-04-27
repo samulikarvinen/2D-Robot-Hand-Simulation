@@ -37,9 +37,6 @@ class Robot:
         coord_initial = self.coord2
         coord_final = np.array([x, y])
 
-        # this variable is used to determine how to move the arm
-        theta2_initial = self.theta2
-
         # using a variable to distinguish between the user and automatic control for the slider
         self.automatic = True
 
@@ -49,7 +46,7 @@ class Robot:
             self.coord2 = (1 - s) * coord_initial + s * coord_final
 
             # use inverse kinematics to update the new angles for the joints
-            self.inverse_kinematics(self.coord2[0], self.coord2[1], theta2_initial)
+            self.inverse_kinematics(self.coord2[0], self.coord2[1])
 
             # calculating the joint coordinate of the second joint using the angles from inverse kinematics
             self.coord1[0] = self.len1 * math.cos(self.theta1)
@@ -76,8 +73,9 @@ class Robot:
             # show graphics
             app.processEvents()
 
-        # back to the user control
+        # back to the user control and switch off
         self.automatic = False
+        self.switch = False
 
     def forward_kinematics(self, theta1, theta2):  # in radians
         # calculating the coordinates of the second joint
@@ -94,15 +92,16 @@ class Robot:
         # changing the coordinates of the end-effector
         self.coord2 = np.array([x2, y2])
 
-    def inverse_kinematics(self, x, y, theta2_initial):  # in radians
+    def inverse_kinematics(self, x, y):  # in radians
         # calculating the angles theta1 and theta2
         # the if-condition identifies the correct inverse kinematics formula for the current robot arm pose
-        if theta2_initial < 0:
+
+        if self.theta2 < 0:
             self.theta2 = - math.acos((x**2 + y**2 - self.len1**2 - self.len2**2) / (2 * self.len1 * self.len2))
             self.theta1 = math.atan2(y, x) - math.atan2((self.len2 * math.sin(self.theta2)),
                                                         (self.len1 + self.len2 * math.cos(self.theta2)))
         else:
-            self.theta2 = math.acos((x ** 2 + y ** 2 - self.len1 ** 2 - self.len2 ** 2) / (2 * self.len1 * self.len2))
+            self.theta2 = math.acos((x**2 + y**2 - self.len1**2 - self.len2**2) / (2 * self.len1 * self.len2))
             self.theta1 = math.atan2(y, x) - math.atan2((self.len2 * math.sin(self.theta2)),
                                                         (self.len1 + self.len2 * math.cos(self.theta2)))
 

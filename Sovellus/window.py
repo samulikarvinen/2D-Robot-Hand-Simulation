@@ -129,14 +129,14 @@ class Window(QMainWindow):
         # adding the x coordinate sections
         label_x_line = QLabel("x:")
         grid.addWidget(label_x_line, 1, 0)
-        self.x_line = QLineEdit('50')
+        self.x_line = QLineEdit('-50')
         self.x_line.setValidator(QIntValidator())
         grid.addWidget(self.x_line, 1, 1)
 
         # adding the y coordinate sections
         label_y_line = QLabel("y:")
         grid.addWidget(label_y_line, 2, 0)
-        self.y_line = QLineEdit('50')
+        self.y_line = QLineEdit('0')
         self.y_line.setValidator(QIntValidator())
         grid.addWidget(self.y_line, 2, 1)
 
