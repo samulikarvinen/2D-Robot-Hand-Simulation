@@ -41,6 +41,7 @@ class Robot:
         self.automatic = True
 
         # update graphics in each loop
+        # intentionally starts from 0.001 because the the end-effector is already in the same spot when s = 0.
         for s in np.arange(0.001, 1.001, 0.001):
             # change in end-effector coordinate
             self.coord2 = (1 - s) * coord_initial + s * coord_final
