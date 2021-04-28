@@ -61,7 +61,7 @@ class Window(QMainWindow):
 
         # adding the first slider for the layout
         self.first_slider = QSlider(Qt.Horizontal)
-        self.first_slider.setRange(-18000, 18000)  # 360 000 in order to have 0.01 increments from 0 to 360 degrees
+        self.first_slider.setRange(-36000, 36000)  # 360 000 in order to have 0.01 increments from 0 to 360 degrees
         self.first_slider.setTickPosition(QSlider.TicksAbove)
         self.first_slider.setTickInterval(3600)
         grid.addWidget(self.first_slider, 1, 0, 1, 2)
@@ -75,7 +75,7 @@ class Window(QMainWindow):
 
         # adding the second slider for the layout
         self.second_slider = QSlider(Qt.Horizontal)
-        self.second_slider.setRange(-18000, 18000)  # 36 000 in order to have 0.01 increments from 0 to 360 degrees
+        self.second_slider.setRange(-36000, 36000)  # 36 000 in order to have 0.01 increments from 0 to 360 degrees
         self.second_slider.setTickPosition(QSlider.TicksAbove)
         self.second_slider.setTickInterval(3600)
         grid.addWidget(self.second_slider, 3, 0, 1, 2)

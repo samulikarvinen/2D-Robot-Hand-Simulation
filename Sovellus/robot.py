@@ -96,7 +96,7 @@ class Robot:
         # calculating the angles theta1 and theta2
         # the if-condition identifies the correct inverse kinematics formula for the current robot arm pose
 
-        if self.theta2 < 0:
+        if self.theta2 <= 0:
             self.theta2 = - math.acos((x**2 + y**2 - self.len1**2 - self.len2**2) / (2 * self.len1 * self.len2))
             self.theta1 = math.atan2(y, x) - math.atan2((self.len2 * math.sin(self.theta2)),
                                                         (self.len1 + self.len2 * math.cos(self.theta2)))
