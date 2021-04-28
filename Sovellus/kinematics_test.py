@@ -36,15 +36,15 @@ class KinematicsTest(unittest.TestCase):
         # due to the fact of rounding errors in float numbers.
         # there is no particular reason to use exact 6 decimals, but I thought it has high enough accuracy.
 
-        # x = 0 and y = 300 and theta2_initial = 1°
-        self.robot.inverse_kinematics(300, 0, math.radians(1))
+        # x = 0 and y = 300
+        self.robot.inverse_kinematics(300, 0)
         self.assertEqual(np.round(self.robot.theta1, 6), np.round(math.radians(0), 6))
         self.assertEqual(np.round(self.robot.theta2, 6), np.round(math.radians(0), 6))
 
-        # x = 150 and y = -150 and theta2_initial = -1°
-        self.robot.inverse_kinematics(150, -150, math.radians(-1))
-        self.assertEqual(np.round(self.robot.theta1, 6), np.round(math.radians(0), 6))
-        self.assertEqual(np.round(self.robot.theta2, 6), np.round(math.radians(-90), 6))
+        # x = 150 and y = -150
+        self.robot.inverse_kinematics(150, -150)
+        self.assertEqual(np.round(self.robot.theta1, 6), np.round(math.radians(-90), 6))
+        self.assertEqual(np.round(self.robot.theta2, 6), np.round(math.radians(90), 6))
 
 
 if __name__ == "__main__":
