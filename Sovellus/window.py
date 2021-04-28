@@ -160,7 +160,7 @@ class Window(QMainWindow):
         if self.x_line.text() and self.y_line.text():
             x = int(self.x_line.text())
             y = int(self.y_line.text())
-            if sqrt(x**2 + y**2) <= (self.robot.len1 + self.robot.len2):
+            if sqrt(x**2 + y**2) <= (self.robot.len1 + self.robot.len2) or -1 > (x**2 + y**2 - self.robot.len1**2 - self.robot.len2**2) / (2 * self.robot.len1 * self.robot.len2) > 1:
                 # hides the warning label and moves linearly towards the coordinate (x, y)
                 self.label_reach.hide()
                 self.robot.move_with_coordinates(self, app, self.robot_graphics, self.square, self.square_graphics, self.text_graphics, x, y)

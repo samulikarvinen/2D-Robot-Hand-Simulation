@@ -41,7 +41,7 @@ class Robot:
         self.automatic = True
 
         # update graphics in each loop
-        for s in np.arange(0, 1.001, 0.001):
+        for s in np.arange(0.001, 1.001, 0.001):
             # change in end-effector coordinate
             self.coord2 = (1 - s) * coord_initial + s * coord_final
 
@@ -75,7 +75,6 @@ class Robot:
 
         # back to the user control and switch off
         self.automatic = False
-        self.switch = False
 
     def forward_kinematics(self, theta1, theta2):  # in radians
         # calculating the coordinates of the second joint
@@ -96,7 +95,7 @@ class Robot:
         # calculating the angles theta1 and theta2
         # the if-condition identifies the correct inverse kinematics formula for the current robot arm pose
 
-        if self.theta2 <= 0:
+        if -180 < self.theta2 < 0 or 180 < self.theta2 < 360:
             self.theta2 = - math.acos((x**2 + y**2 - self.len1**2 - self.len2**2) / (2 * self.len1 * self.len2))
             self.theta1 = math.atan2(y, x) - math.atan2((self.len2 * math.sin(self.theta2)),
                                                         (self.len1 + self.len2 * math.cos(self.theta2)))
