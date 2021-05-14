@@ -1,4 +1,4 @@
-Samuli Karvinen, 602945
+Samuli Karvinen
 
 # Robottikäsi
 
